@@ -19,33 +19,43 @@ letters.forEach(letter => {
   const ctx = canvas.getContext('2d');
   let isDrawing = false;
 
+  const getCoordinates = (e, c) => {
+    const rect = c.getBoundingClientRect();
+    if (e.touches) {
+      return {
+        x: e.touches[0].clientX - rect.left,
+        y: e.touches[0].clientY - rect.top,
+      };
+    } else {
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      };
+    }
+  };
+
   const startPosition = e => {
     isDrawing = true;
     ctx.beginPath();
+    e.preventDefault();
   };
 
   const endPosition = e => {
     isDrawing = false;
     ctx.closePath();
+    e.preventDefault();
   };
 
   const draw = e => {
     if (isDrawing) {
-      let x, y;
-      const rect = canvas.getBoundingClientRect();
-      if (e.type.includes('touch')) {
-        x = e.touches[0].clientX - canvas.offsetLeft;
-        y = e.touches[0].clientY - canvas.offsetTop;
-      } else {
-        x = e.clientX - rect.left;
-        y = e.clientY - rect.top;
-      }
+      const { x, y } = getCoordinates(e, canvas);
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
       ctx.strokeStyle = '#000';
       ctx.lineTo(x, y);
       ctx.stroke();
     }
+    e.preventDefault();
   };
 
   canvas.addEventListener('mousedown', startPosition);
