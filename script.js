@@ -17,21 +17,6 @@ let removedData = [];
 const get = (k, d) => JSON.parse(localStorage.getItem(`learn-english-${k}`)) ?? d;
 const set = (k, v) => localStorage.setItem(`learn-english-${k}`, JSON.stringify(v));
 
-const getCoordinates = (c, e) => {
-    const rect = c.getBoundingClientRect();
-    if (e.touches) {
-        return {
-            x: e.touches[0].clientX - rect.left,
-            y: e.touches[0].clientY - rect.top,
-        };
-    } else {
-        return {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-        };
-    }
-};
-
 const startPosition = (c, e) => {
     isDrawing = true;
     const ctx = c.getContext('2d');
@@ -43,6 +28,7 @@ const endPosition = (canvas, e) => {
     isDrawing = false;
     const c = canvas.classList.value;
     const ctx = canvas.getContext('2d');
+    ctx.closePath();
     if (d.length > 0) {
         data.push({c, d});
     }
@@ -52,20 +38,27 @@ const endPosition = (canvas, e) => {
     clearBtn.classList.add('enable');
     clearBtn.classList.remove('disable');
     set('data', {data, removedData});
-    ctx.closePath();
     e.preventDefault();
 };
 
 const draw = (c, e) => {
     if (isDrawing) {
-        const { x, y } = getCoordinates(c, e);
+        const rect = c.getBoundingClientRect();
+        let x, y;
+        if (e.touches) {
+            x = e.touches[0].clientX - rect.left;
+            y = e.touches[0].clientY - rect.top;
+        } else {
+            x = e.clientX - rect.left;
+            y = e.clientY - rect.top;
+        }
         const ctx = c.getContext('2d');
         ctx.lineWidth = 3;
         ctx.lineCap = 'round';
         ctx.strokeStyle = '#000';
         ctx.lineTo(x, y);
         ctx.stroke();
-        if (x || y) d.push({ x, y });
+        (x || y) && d.push({ x, y });
     }
     e.preventDefault();
 };
@@ -151,12 +144,9 @@ const drawAll = (canvas, e) => {
 };
 
 const generate = small => {
-    
     container.textContent = '';
     letters = small ? smallLetters : capitalLetters;
-
     letters.forEach(letter => {
-    
         const box = document.createElement('div');
         box.classList.add('box');
 
@@ -234,7 +224,5 @@ document.addEventListener('keydown', e => {
     const {data: d, removedData: rd} = get('data', {data: [], removedData: []});
     data = d;
     removedData = rd;
-    if (d.length !== 0) {
-        document.querySelectorAll('canvas').forEach(c => drawAll(c, e));
-    }
+    (d.length !== 0) && document.querySelectorAll('canvas').forEach(c => drawAll(c, e));
 })();
