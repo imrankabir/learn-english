@@ -1,14 +1,14 @@
 body {
   margin: 0;
   padding: 0;
-  text-align: center;
-  background-color: #f0f8ff;
+  display: flex;
+  background: #ccc;
+  margin-top: 10px;
+  flex-direction: column;
+  justify-content: center;
   font-family: Arial, sans-serif;
 }
 .container {
-  padding: 20px;
-}
-.grid-container {
   gap: 10px;
   padding: 10px;
   display: flex;
@@ -18,9 +18,9 @@ body {
 .letter-box {
   width: 150px;
   height: 150px;
+  background: #fff;
   position: relative;
   border: 2px solid #333;
-  background-color: #fff;
 }
 canvas {
   top: 0;
@@ -43,8 +43,27 @@ button {
   margin-top: 20px;
   padding: 10px 20px;
   border-radius: 5px;
-  background-color: #4caf50;
+  background: #4caf50;
 }
 button:hover {
-  background-color: #45a049;
+  background: #45a049;
+}
+.controls {
+    gap: 10px;
+    display: flex;
+    justify-content: center;
+}
+.controls span {
+    font-size: 1rem;
+    padding: 1px 2px;
+    margin-bottom: 3px;
+    border-radius: 5px;
+}
+.disable {
+  cursor: default;
+  background: #fff;
+}
+.enable {
+  cursor: pointer;
+  background: #efe;
 }
