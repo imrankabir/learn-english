@@ -188,7 +188,7 @@ changeFont.addEventListener('change', e => {
 
 smallControl.addEventListener('change', e => {
     const small = e.target.checked;
-    const { font } = get('font', false);
+    const { font } = get('font', {font: false});
     generate(small);
     changeFontFamily(font);
     set('small', {small});
@@ -215,8 +215,8 @@ document.addEventListener('keydown', e => {
 });
 
 (e => {
-    const { small } = get('small', false);
-    const { font } = get('font', false);
+    const { small } = get('small', {small: false});
+    const { font } = get('font', {font: false});
     generate(small);
     changeFontFamily(font);
     smallControl.checked = small;
