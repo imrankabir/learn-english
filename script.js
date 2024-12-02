@@ -161,6 +161,11 @@ const generate = small => {
         canvas.height = 120;
         box.appendChild(canvas);
 
+        canvas.addEventListener('pointerdown', e => startPosition(canvas, e));
+        canvas.addEventListener('pointerup', e => endPosition(canvas, e));
+        canvas.addEventListener('pointerout', e => endPosition(canvas, e));
+        canvas.addEventListener('pointermove', e => draw(canvas, e));
+
         canvas.addEventListener('mousedown', e => startPosition(canvas, e));
         canvas.addEventListener('mouseup', e => endPosition(canvas, e));
         canvas.addEventListener('mouseleave', e => endPosition(canvas, e));
